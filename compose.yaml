@@ -1,0 +1,30 @@
+# """redis Image : redislabs/redismod
+# Projeye eklenmesi gereken ENV : stop_signal: SIGINT
+# uygulama çalışacak port : 8000
+# volume eklenecek :  .:/code
+# """
+
+services:
+  redis:
+    image: redislabs/redismod
+    ports:
+      - '6379:6379'
+    stop_signal: SIGINT
+
+    
+  
+  flask_app:
+    build: . 
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/code
+    
+
+
+
+
+
+
+    
+    
