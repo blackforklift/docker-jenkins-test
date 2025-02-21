@@ -53,7 +53,7 @@ pipeline {
         stage('cleanup prev containers') {
                     steps {
                         script {
-                            sh 'docker-compose down'
+                            sh 'docker-compose down ||true'
 
                              sh 'docker ps'
 
@@ -81,7 +81,7 @@ pipeline {
                 script {
                 sh 'echo "Current working directory: $PWD"'
 
-                sh 'docker run -d --name flask_app --network my_network -p 8000:8000 -v -v "$PWD:/code" $DOCKER_IMAGE'
+                sh 'docker run -d --name flask_app --network my_network -p 8000:8000 -v "$PWD:/code" $DOCKER_IMAGE'
                 }
             }
         }
