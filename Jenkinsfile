@@ -59,7 +59,7 @@ pipeline {
 
                              sh 'docker rm -f redis || true'
 
-                             sh 'docker rm -f flask_app || true'
+                             sh 'docker rm -f redis || true'
                         
                         }
                     }
@@ -68,6 +68,8 @@ pipeline {
         stage('docker run -redis') {
             steps {
                 script {
+                    sh 'docker network rm my_network || true '
+
                     sh'docker network create my_network'
 
                     sh 'docker run -d --name redis --network my_network -p 6379:6379 redislabs/redismod '
