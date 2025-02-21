@@ -50,6 +50,20 @@ pipeline {
                 }
             }
         }
+        stage('cleanup prev containers') {
+                    steps {
+                        script {
+                            sh 'docker-compose down'
+
+                             sh 'docker ps'
+
+                             sh 'docker rm -f redis || true'
+
+                             sh 'docker rm -f flask_app || true'
+                        
+                        }
+                    }
+                }
 
         stage('docker run -redis') {
             steps {
