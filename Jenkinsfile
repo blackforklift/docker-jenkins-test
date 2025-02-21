@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout Code') {  
 
             steps {
-               git credentialsId: 'github-credentials', url: 'https://github.com/blackforklift/docker-jenkins-test.git'
+               git branch: 'main', credentialsId: 'github-credentials', url: 'https://github.com/blackforklift/docker-jenkins-test.git'
             }
         }
 
