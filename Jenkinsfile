@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout Code') {  
 
             steps {
-                git 'https://github.com/blackforklift/docker-jenkins-test.git'
+               git credentialsId: 'github-credentials', url: 'https://github.com/blackforklift/docker-jenkins-test.git'
             }
         }
 
@@ -35,7 +35,7 @@ pipeline {
         stage("docker push") {  
             steps {
                 script {
-                    withDockerRegistry([credentialsId: 'demo-app-git-credits', url: '']) {
+                    withDockerRegistry([credentialsId: 'my-docker-hub-credentials', url: '']) {
                         sh 'docker push $DOCKER_IMAGE'
                     }
                 }
