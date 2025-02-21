@@ -51,10 +51,21 @@ pipeline {
             }
         }
 
-        stage('docker run') {
+        stage('docker run -redis') {
             steps {
                 script {
-                sh 'docker-compose -f $COMPOSE_FILE up -d --force-recreate'
+                    sh'docker network create my_network'
+
+                    sh 'docker run -d --name redis --network my_network -p 6379:6379 redislabs/redismod '
+                }
+            }
+        }
+        stage('docker run -app') {
+            steps {
+                script {
+                sh 'echo "Current working directory: $PWD"'
+
+                sh 'docker run -d --name flask_app --network my_network -p 8000:8000 -v -v "$PWD:/code" $DOCKER_IMAGE'
                 }
             }
         }
