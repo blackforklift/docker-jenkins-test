@@ -1,26 +1,61 @@
 pipeline {  
 
     agent any    //where to execute
-    stages {
 
-        stage("build") {  //stages where the work happens stages and steps
+
+    environment {   //defining variables for code readablity
+        DOCKER_IMAGE = "dilansas/flask-app:latest"
+        COMPOSE_FILE = "compose.yaml"
+    }
+
+
+    stages { //stages where the work happens stages and steps
+
+        stage('Checkout Code') {  
 
             steps {
-                echo 'building the app'
+                git 'https://github.com/blackforklift/docker-jenkins-test.git'
             }
         }
 
-         stage("test") {  
+         stage("docker build") {  
 
             steps {
-                 echo 'testing the app'
+              sh 'docker build -t flask-redis-app .'
+            }
+        }
+        stage("docker tag") {  
+
+            steps {
+              sh 'docker tag flask-redis-app $DOCKER_IMAGE'
+            }
+        }
+       
+
+        stage("docker push") {  
+            steps {
+                script {
+                    withDockerRegistry([credentialsId: 'demo-app-git-credits', url: '']) {
+                        sh 'docker push $DOCKER_IMAGE'
+                    }
+                }
+            }
+        }
+       
+        stage('docker pull') {
+            steps {
+                script {
+                    sh 'docker pull $DOCKER_IMAGE'
+                  
+                }
             }
         }
 
-         stage("deploy") { 
-
+        stage('docker run') {
             steps {
-                 echo 'deploying the app'
+                script {
+                sh 'docker-compose -f $COMPOSE_FILE up -d --force-recreate'
+                }
             }
         }
 
