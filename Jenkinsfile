@@ -59,7 +59,7 @@ pipeline {
 
                              sh 'docker rm -f redis || true'
 
-                             sh 'docker rm -f redis || true'
+                             sh 'docker rm -f flask_app || true'
                         
                         }
                     }
